@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ค้นหารายการสินค้าด้วย Item No แล้ว Copy Description ไปใช้งาน">
+  <title>Item Search - ค้นหารายการสินค้า</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap">
+  <style>
+    :root {
+      --primary: #0078D4;
+      --primary-deep: #005FA3;
+      --primary-soft: rgba(0, 120, 212, 0.08);
+      --success: #31a24c;
+      --success-soft: rgba(49, 162, 76, 0.10);
+      --canvas: #ffffff;
+      --surface: #f1f4f7;
+      --surface-alt: #e8ecf0;
+      --ink: #1c1e21;
+      --ink-deep: #0a1317;
+      --charcoal: #444950;
+      --steel: #5d6c7b;
+      --stone: #8595a4;
+      --hairline: #dee3e9;
+      --critical: #e41e3f;
+      --critical-soft: rgba(228, 30, 63, 0.08);
+      --font: 'Montserrat', 'Noto Sans Thai', Helvetica, Arial, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --primary: #4da6ff;
+        --primary-deep: #7abfff;
+        --primary-soft: rgba(77, 166, 255, 0.12);
+        --success: #52d171;
+        --success-soft: rgba(82, 209, 113, 0.12);
+        --canvas: #1a1d21;
+        --surface: #23272b;
+        --surface-alt: #2c3035;
+        --ink: #e4e6ea;
+        --ink-deep: #f0f2f5;
+        --charcoal: #b0b3b8;
+        --steel: #8a8d91;
+        --stone: #606770;
+        --hairline: #3a3d42;
+        --critical: #f0284a;
+        --critical-soft: rgba(240, 40, 74, 0.12);
+      }
+    }
+    :root[data-theme="dark"] {
+      --primary: #4da6ff;
+      --primary-deep: #7abfff;
+      --primary-soft: rgba(77, 166, 255, 0.12);
+      --success: #52d171;
+      --success-soft: rgba(82, 209, 113, 0.12);
+      --canvas: #1a1d21;
+      --surface: #23272b;
+      --surface-alt: #2c3035;
+      --ink: #e4e6ea;
+      --ink-deep: #f0f2f5;
+      --charcoal: #b0b3b8;
+      --steel: #8a8d91;
+      --stone: #606770;
+      --hairline: #3a3d42;
+      --critical: #f0284a;
+      --critical-soft: rgba(240, 40, 74, 0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--surface);
+      color: var(--ink);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px 60px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .header-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 28px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .header-bar svg { flex-shrink: 0; }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--ink-deep);
+      line-height: 1.25;
+      text-wrap: balance;
+    }
+    .header p {
+      color: var(--steel);
+      font-size: 14px;
+      margin-top: 6px;
+      font-weight: 400;
+    }
+
+    .card {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: 24px;
+      padding: 32px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .search-group { position: relative; }
+
+    .search-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--steel);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-input-wrap svg {
+      position: absolute;
+      left: 16px;
+      color: var(--stone);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 52px;
+      border: 2px solid var(--hairline);
+      border-radius: 100px;
+      padding: 0 48px 0 48px;
+      font-family: var(--font);
+      font-size: 18px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: var(--ink-deep);
+      background: var(--canvas);
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .search-input::placeholder {
+      color: var(--stone);
+      font-weight: 400;
+      font-size: 15px;
+    }
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-soft);
+    }
+
+    .clear-btn {
+      position: absolute;
+      right: 8px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: var(--surface);
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: var(--steel);
+      transition: background 0.12s;
+    }
+    .clear-btn:hover { background: var(--surface-alt); }
+    .clear-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .clear-btn.show { display: flex; }
+
+    .result {
+      margin-top: 24px;
+      display: none;
+    }
+    .result.show { display: block; }
+
+    .result-found {
+      background: var(--primary-soft);
+      border-radius: 16px;
+      padding: 20px 24px;
+    }
+
+    .result-item-no {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .result-desc {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink-deep);
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 48px;
+      margin-top: 16px;
+      border: none;
+      border-radius: 100px;
+      background: var(--primary);
+      color: #fff;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.14px;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .copy-btn:hover { background: var(--primary-deep); }
+    .copy-btn:active { transform: scale(0.98); }
+    .copy-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+
+    .copy-btn.copied {
+      background: var(--success);
+      pointer-events: none;
+    }
+
+    .result-not-found {
+      background: var(--critical-soft);
+      border-radius: 16px;
+      padding: 20px 24px;
+      text-align: center;
+    }
+    .result-not-found .nf-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--critical);
+      color: #fff;
+      margin-bottom: 8px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .result-not-found p {
+      font-size: 14px;
+      color: var(--charcoal);
+      font-weight: 500;
+    }
+    .result-not-found .nf-code {
+      color: var(--critical);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .item-list {
+      margin-top: 28px;
+      width: 100%;
+      max-width: 520px;
+    }
+    .item-list-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--stone);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-left: 4px;
+    }
+    .item-table {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .item-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      gap: 16px;
+      cursor: pointer;
+      transition: background 0.1s;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .item-row:last-child { border-bottom: none; }
+    .item-row:hover { background: var(--primary-soft); }
+    .item-row:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; border-radius: 4px; }
+    .item-row .ir-no {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+      min-width: 64px;
+    }
+    .item-row .ir-desc {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      flex: 1;
+    }
+    .item-row .ir-arrow {
+      color: var(--stone);
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 540px) {
+      body { padding: 24px 12px 40px; }
+      .card { padding: 24px 20px; border-radius: 20px; }
+      .header h1 { font-size: 22px; }
+      .result-desc { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-bar">
+      <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M7 1a6 6 0 1 0 3.46 10.88l2.83 2.83a1 1 0 0 0 1.42-1.42l-2.83-2.83A6 6 0 0 0 7 1ZM3 7a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" fill="currentColor"/></svg>
+      Item Search
+    </div>
+    <h1>ค้นหารายการสินค้า</h1>
+    <p>ใส่รหัสสินค้าเพื่อค้นหา Description แล้ว Copy ไปใช้งาน</p>
+  </div>
+
+  <div class="card">
+    <div class="search-group">
+      <label class="search-label" for="itemInput">Item No</label>
+      <div class="search-input-wrap">
+        <svg width="18" height="18" fill="none" viewBox="0 0 16 16"><path d="M7 1a6 6 0 1 0 3.46 10.88l2.83 2.83a1 1 0 0 0 1.42-1.42l-2.83-2.83A6 6 0 0 0 7 1ZM3 7a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" fill="currentColor"/></svg>
+        <input class="search-input" id="itemInput" type="text" inputmode="numeric" placeholder="เช่น 152509" autocomplete="off">
+        <button class="clear-btn" id="clearBtn" aria-label="ล้างค่า">
+          <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4.47 4.47a.75.75 0 0 1 1.06 0L8 6.94l2.47-2.47a.75.75 0 1 1 1.06 1.06L9.06 8l2.47 2.47a.75.75 0 1 1-1.06 1.06L8 9.06l-2.47 2.47a.75.75 0 0 1-1.06-1.06L6.94 8 4.47 5.53a.75.75 0 0 1 0-1.06Z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <div class="item-list">
+    <div class="item-list-title">รายการสินค้าทั้งหมด</div>
+    <div class="item-table" id="itemTable"></div>
+  </div>
+
+  <script>
+    const ITEMS = [
+      { no: "152509", desc: "ผักชี ถุงใหญ่" },
+      { no: "152510", desc: "มันไข่ กก ละ" },
+      { no: "152517", desc: "ยอดฟักแม้ว" },
+      { no: "152570", desc: "ผักกาดหอม ถุงใหญ่" },
+      { no: "152580", desc: "พริกขี้หนูแดง กก ละ" },
+      { no: "152602", desc: "มะกรูด" },
+      { no: "152624", desc: "ใบกระเพรา กก.ละ" },
+      { no: "152639", desc: "ใบกะเพรา ถุงใหญ่" }
+    ];
+
+    const input = document.getElementById('itemInput');
+    const clearBtn = document.getElementById('clearBtn');
+    const resultDiv = document.getElementById('result');
+    const itemTable = document.getElementById('itemTable');
+
+    // Build item list
+    ITEMS.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      row.tabIndex = 0;
+      row.innerHTML = `
+        <span class="ir-no">${item.no}</span>
+        <span class="ir-desc">${item.desc}</span>
+        <svg class="ir-arrow" width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      `;
+      row.addEventListener('click', () => {
+        input.value = item.no;
+        input.dispatchEvent(new Event('input'));
+        input.focus();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      row.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); row.click(); }
+      });
+      itemTable.appendChild(row);
+    });
+
+    input.addEventListener('input', () => {
+      const val = input.value.trim();
+      clearBtn.classList.toggle('show', val.length > 0);
+
+      if (!val) {
+        resultDiv.classList.remove('show');
+        return;
+      }
+
+      const found = ITEMS.find(i => i.no === val);
+      resultDiv.classList.add('show');
+
+      if (found) {
+        const fullDesc = found.no + " " + found.desc;
+        resultDiv.innerHTML = `
+          <div class="result-found">
+            <div class="result-item-no">Item No: ${found.no}</div>
+            <div class="result-desc" id="descText">${fullDesc}</div>
+          </div>
+          <button class="copy-btn" id="copyBtn" data-desc="${fullDesc.replace(/"/g, '&quot;')}">
+            <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 10.5h-1a1.5 1.5 0 0 1-1.5-1.5v-6A1.5 1.5 0 0 1 2.5 1.5h6A1.5 1.5 0 0 1 10 3v1" stroke="currentColor" stroke-width="1.5"/></svg>
+            Copy Description
+          </button>
+        `;
+        document.getElementById('copyBtn').addEventListener('click', handleCopy);
+      } else {
+        resultDiv.innerHTML = `
+          <div class="result-not-found">
+            <div class="nf-icon">!</div>
+            <p>ไม่พบรหัสสินค้า <span class="nf-code">${val}</span></p>
+          </div>
+        `;
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      clearBtn.classList.remove('show');
+      resultDiv.classList.remove('show');
+      input.focus();
+    });
+
+    function handleCopy(e) {
+      const btn = e.currentTarget;
+      const desc = btn.dataset.desc;
+      navigator.clipboard.writeText(desc).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = `
+          <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Copied!
+        `;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = `
+            <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 10.5h-1a1.5 1.5 0 0 1-1.5-1.5v-6A1.5 1.5 0 0 1 2.5 1.5h6A1.5 1.5 0 0 1 10 3v1" stroke="currentColor" stroke-width="1.5"/></svg>
+            Copy Description
+          `;
+        }, 1800);
+      });
+    }
+
+    input.focus();
+  </script>
+</body>
+</html>
