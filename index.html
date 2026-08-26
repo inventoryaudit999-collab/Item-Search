@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="description" content="ค้นหารายการสินค้าด้วย Item No แล้ว Copy Description ไปใช้งาน">
   <title>Item Search - ค้นหารายการสินค้า</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
@@ -308,59 +308,138 @@
     .btn-clear-all { background: var(--surface); color: var(--steel); padding: 0 20px; }
     .btn-clear-all:hover { background: var(--surface-alt); color: var(--critical); }
 
-    /* ── Login Screen ── */
+    /* ── Login Screen — full-page split layout ── */
     .login-screen {
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      padding: 24px 16px;
+      min-height: 100vh; min-height: 100dvh;
+      display: flex; flex-direction: column;
+      background: #ffffff;
+      position: relative; overflow: hidden;
     }
-    .login-card {
-      background: var(--canvas); border: 1px solid var(--hairline);
-      border-radius: 24px; padding: 48px 40px; width: 100%; max-width: 420px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;
+    .login-hero {
+      flex: 0 0 auto; padding: 56px 32px 48px; text-align: center;
+      background: linear-gradient(160deg, #0078D4 0%, #005FA3 50%, #003d6b 100%);
+      color: #fff; position: relative; overflow: hidden;
     }
-    .login-logo {
-      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-      background: var(--primary); color: #fff;
-      padding: 12px 32px; border-radius: 100px;
-      font-size: 14px; font-weight: 700;
-      letter-spacing: 0.04em; text-transform: uppercase;
-      margin-bottom: 24px;
+    .login-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 500px 300px at 25% 40%, rgba(255,255,255,0.10), transparent),
+        radial-gradient(ellipse 400px 250px at 75% 80%, rgba(255,255,255,0.06), transparent);
+      pointer-events: none;
     }
-    .login-card h2 { font-size: 22px; font-weight: 700; color: var(--ink-deep); margin-bottom: 6px; }
-    .login-card .login-sub { font-size: 14px; color: var(--steel); margin-bottom: 28px; font-weight: 400; }
+    .login-hero::after {
+      content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 32px;
+      background: #ffffff; border-radius: 24px 24px 0 0;
+    }
+    .login-hero-icon {
+      width: 64px; height: 64px; border-radius: 20px;
+      background: rgba(255,255,255,0.18); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 18px; border: 1px solid rgba(255,255,255,0.2);
+      animation: heroIn 0.6s ease;
+    }
+    @keyframes heroIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .login-hero h1 {
+      font-size: 24px; font-weight: 700; margin-bottom: 6px;
+      letter-spacing: -0.01em; position: relative;
+    }
+    .login-hero p {
+      font-size: 14px; opacity: 0.8; font-weight: 400; position: relative;
+    }
+    .login-form-area {
+      flex: 1; display: flex; flex-direction: column;
+      padding: 28px 28px 32px; max-width: 440px;
+      width: 100%; margin: 0 auto;
+      animation: formIn 0.5s ease 0.15s both;
+    }
+    @keyframes formIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .login-form-title {
+      font-size: 18px; font-weight: 700; color: var(--ink-deep);
+      margin-bottom: 24px; text-align: center;
+    }
     .login-field { text-align: left; margin-bottom: 18px; }
     .login-field label {
       display: block; font-size: 13px; font-weight: 700; color: var(--ink);
-      margin-bottom: 6px;
+      margin-bottom: 7px;
+    }
+    .login-field .input-wrap {
+      position: relative; display: flex; align-items: center;
+    }
+    .login-field .input-icon {
+      position: absolute; left: 14px; color: var(--stone);
+      display: flex; align-items: center; pointer-events: none;
+      transition: color 0.2s;
     }
     .login-field input {
-      width: 100%; height: 48px; border: 2px solid var(--hairline);
-      border-radius: 12px; padding: 0 16px; font-family: var(--font);
-      font-size: 15px; color: var(--ink-deep); background: var(--surface);
-      outline: none; transition: border-color 0.15s;
+      width: 100%; height: 52px; border: 2px solid var(--hairline);
+      border-radius: 14px; padding: 0 16px 0 44px; font-family: var(--font);
+      font-size: 16px; color: var(--ink-deep); background: var(--surface);
+      outline: none; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
     }
     .login-field input::placeholder { color: var(--stone); font-weight: 400; }
-    .login-field input:focus { border-color: var(--primary); background: var(--canvas); box-shadow: 0 0 0 3px var(--primary-soft); }
-    .login-btn {
-      width: 100%; height: 50px; border: none; border-radius: 100px;
-      background: var(--primary); color: #fff; font-family: var(--font);
-      font-size: 16px; font-weight: 700; cursor: pointer;
-      margin-top: 8px; transition: background 0.15s, transform 0.1s;
+    .login-field input:focus {
+      border-color: var(--primary); background: var(--canvas);
+      box-shadow: 0 0 0 4px var(--primary-soft);
     }
-    .login-btn:hover { background: var(--primary-deep); }
-    .login-btn:active { transform: scale(0.98); }
+    .login-field .input-wrap:focus-within .input-icon { color: var(--primary); }
+    .toggle-pass {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; padding: 8px;
+      color: var(--stone); display: flex; align-items: center;
+      transition: color 0.15s; border-radius: 8px;
+    }
+    .toggle-pass:hover { color: var(--ink); }
+    .login-btn {
+      width: 100%; height: 52px; border: none; border-radius: 14px;
+      background: linear-gradient(135deg, #0078D4, #005FA3);
+      color: #fff; font-family: var(--font);
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      margin-top: 6px; transition: transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(0,120,212,0.3);
+      letter-spacing: 0.01em;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .login-btn:hover { box-shadow: 0 6px 24px rgba(0,120,212,0.4); }
+    .login-btn:active { transform: scale(0.98); box-shadow: 0 2px 8px rgba(0,120,212,0.2); }
     .login-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
     .login-error {
-      display: none; margin-top: 14px; padding: 10px 16px;
+      display: none; margin-top: 14px; padding: 12px 16px;
       background: var(--critical-soft); border-radius: 12px;
       font-size: 13px; font-weight: 600; color: var(--critical);
+      text-align: left;
     }
-    .login-error.show { display: block; }
+    .login-error.show { display: flex; align-items: center; gap: 8px; }
+    .login-footer {
+      margin-top: auto; padding-top: 24px;
+      text-align: center; font-size: 11px; color: var(--stone); font-weight: 500;
+    }
     .login-shake { animation: shake 0.4s ease; }
     @keyframes shake {
       0%,100% { transform: translateX(0); }
       20%,60% { transform: translateX(-8px); }
       40%,80% { transform: translateX(8px); }
+    }
+    /* Desktop: centered card on gradient */
+    @media (min-width: 541px) {
+      .login-screen {
+        align-items: center; justify-content: center;
+        background: linear-gradient(160deg, #0078D4 0%, #005FA3 50%, #003d6b 100%);
+        padding: 24px;
+      }
+      .login-screen > .login-wrap {
+        background: #fff; border-radius: 24px; overflow: hidden;
+        box-shadow: 0 12px 48px rgba(0,0,0,0.2);
+        max-width: 420px; width: 100%;
+      }
+      .login-hero { padding: 40px 32px 36px; }
+      .login-hero::after { height: 24px; }
+      .login-form-area { padding: 20px 32px 32px; }
     }
 
     /* ── User Bar ── */
@@ -398,7 +477,9 @@
     @media (max-width: 540px) {
       body { padding: 24px 12px 40px; }
       .card, .notes-card { padding: 24px 20px; border-radius: 20px; }
-      .login-card { padding: 36px 24px; border-radius: 20px; }
+      .login-hero { padding: 44px 24px 40px; }
+      .login-hero h1 { font-size: 22px; }
+      .login-form-area { padding: 20px 20px 28px; }
       .header h1 { font-size: 22px; }
       .result-desc { font-size: 17px; }
       .action-row { flex-direction: row; }
@@ -415,23 +496,45 @@
 
   <!-- Login Screen -->
   <div class="login-screen" id="loginScreen">
-    <div class="login-card">
-      <div class="login-logo">
-        <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M7 1a6 6 0 1 0 3.46 10.88l2.83 2.83a1 1 0 0 0 1.42-1.42l-2.83-2.83A6 6 0 0 0 7 1ZM3 7a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" fill="currentColor"/></svg>
-        Item Search
+    <div class="login-wrap">
+      <!-- Hero / Branding -->
+      <div class="login-hero">
+        <div class="login-hero-icon">
+          <svg width="30" height="30" fill="none" viewBox="0 0 16 16"><path d="M7 1a6 6 0 1 0 3.46 10.88l2.83 2.83a1 1 0 0 0 1.42-1.42l-2.83-2.83A6 6 0 0 0 7 1ZM3 7a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" fill="currentColor"/></svg>
+        </div>
+        <h1>Item Search</h1>
+        <p>ระบบค้นหารายการสินค้า</p>
       </div>
-      <h2>เข้าสู่ระบบ</h2>
-      <p class="login-sub">กรุณาเข้าสู่ระบบเพื่อใช้งาน</p>
-      <div class="login-field">
-        <label for="loginUser">Username</label>
-        <input type="text" id="loginUser" placeholder="ใส่ Username" autocomplete="username" spellcheck="false">
+      <!-- Form -->
+      <div class="login-form-area">
+        <div class="login-form-title">เข้าสู่ระบบ</div>
+        <div class="login-field">
+          <label for="loginUser">Username</label>
+          <div class="input-wrap">
+            <span class="input-icon"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v2h20v-2c0-3.33-6.67-5-10-5z" fill="currentColor"/></svg></span>
+            <input type="text" id="loginUser" placeholder="ใส่ Username" autocomplete="username" spellcheck="false">
+          </div>
+        </div>
+        <div class="login-field">
+          <label for="loginPass">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z" fill="currentColor"/></svg></span>
+            <input type="password" id="loginPass" placeholder="ใส่ Password" autocomplete="current-password">
+            <button type="button" class="toggle-pass" id="togglePass" aria-label="แสดง/ซ่อนรหัสผ่าน">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" id="eyeIcon"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/></svg>
+            </button>
+          </div>
+        </div>
+        <button class="login-btn" id="loginBtn">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" style="margin-right:6px"><path d="M10.5 12.5L14 8l-3.5-4.5M14 8H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(3,4)"/></svg>
+          เข้าสู่ระบบ
+        </button>
+        <div class="login-error" id="loginError">
+          <svg width="16" height="16" fill="none" viewBox="0 0 16 16" style="flex-shrink:0"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm0 10.5a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM8.75 8a.75.75 0 0 1-1.5 0V5a.75.75 0 0 1 1.5 0v3Z" fill="currentColor"/></svg>
+          Username หรือ Password ไม่ถูกต้อง
+        </div>
+        <div class="login-footer">Item Search System v2.0</div>
       </div>
-      <div class="login-field">
-        <label for="loginPass">Password</label>
-        <input type="password" id="loginPass" placeholder="ใส่ Password" autocomplete="current-password">
-      </div>
-      <button class="login-btn" id="loginBtn">เข้าสู่ระบบ</button>
-      <div class="login-error" id="loginError">Username หรือ Password ไม่ถูกต้อง</div>
     </div>
   </div>
 
@@ -152951,10 +153054,10 @@
         applyLogin(u, user.n);
       } else {
         loginError.classList.add('show');
-        const card = document.querySelector('.login-card');
-        card.classList.remove('login-shake');
-        void card.offsetWidth;
-        card.classList.add('login-shake');
+        const formArea = document.querySelector('.login-form-area');
+        formArea.classList.remove('login-shake');
+        void formArea.offsetWidth;
+        formArea.classList.add('login-shake');
       }
     }
 
@@ -152999,6 +153102,16 @@
     loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
     loginUser.addEventListener('keydown', e => { if (e.key === 'Enter') loginPass.focus(); });
     logoutBtn.addEventListener('click', doLogout);
+
+    // Password visibility toggle
+    const togglePass = document.getElementById('togglePass');
+    togglePass.addEventListener('click', () => {
+      const isPass = loginPass.type === 'password';
+      loginPass.type = isPass ? 'text' : 'password';
+      document.getElementById('eyeIcon').innerHTML = isPass
+        ? '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12z" stroke="currentColor" stroke-width="2" fill="none"/><line x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="2"/>'
+        : '<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/>';
+    });
 
     // Check session persistence
     (function checkSession() {
