@@ -25,6 +25,8 @@
       --hairline: #dee3e9;
       --critical: #e41e3f;
       --critical-soft: rgba(228, 30, 63, 0.08);
+      --amber: #f2a918;
+      --amber-soft: rgba(242, 169, 24, 0.10);
       --font: 'Montserrat', 'Noto Sans Thai', Helvetica, Arial, sans-serif;
     }
 
@@ -46,6 +48,8 @@
         --hairline: #3a3d42;
         --critical: #f0284a;
         --critical-soft: rgba(240, 40, 74, 0.12);
+        --amber: #f7c948;
+        --amber-soft: rgba(247, 201, 72, 0.12);
       }
     }
     :root[data-theme="dark"] {
@@ -65,6 +69,8 @@
       --hairline: #3a3d42;
       --critical: #f0284a;
       --critical-soft: rgba(240, 40, 74, 0.12);
+      --amber: #f7c948;
+      --amber-soft: rgba(247, 201, 72, 0.12);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -81,265 +87,239 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    .header {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
+    /* ── Header ── */
+    .header { text-align: center; margin-bottom: 24px; }
     .header-bar {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--primary);
-      color: #fff;
-      padding: 10px 28px;
-      border-radius: 100px;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--primary); color: #fff;
+      padding: 10px 28px; border-radius: 100px;
+      font-size: 13px; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase;
       margin-bottom: 16px;
     }
     .header-bar svg { flex-shrink: 0; }
-
-    .header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--ink-deep);
-      line-height: 1.25;
-      text-wrap: balance;
+    .header h1 { font-size: 28px; font-weight: 700; color: var(--ink-deep); line-height: 1.25; text-wrap: balance; }
+    .header p { color: var(--steel); font-size: 14px; margin-top: 6px; font-weight: 400; }
+    .header .data-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 10px; padding: 6px 14px;
+      border-radius: 100px; font-size: 12px; font-weight: 600;
+      font-variant-numeric: tabular-nums;
     }
-    .header p {
-      color: var(--steel);
-      font-size: 14px;
-      margin-top: 6px;
-      font-weight: 400;
+    .data-status.loading { background: var(--amber-soft); color: var(--amber); }
+    .data-status.ready { background: var(--success-soft); color: var(--success); }
+    .data-status.error { background: var(--critical-soft); color: var(--critical); }
+    .data-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: currentColor; display: inline-block;
     }
+    .data-dot.pulse { animation: pulse 1.2s ease infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
+    /* ── Tabs ── */
+    .tabs {
+      display: flex; gap: 4px;
+      background: var(--canvas); border: 1px solid var(--hairline);
+      border-radius: 100px; padding: 4px;
+      margin-bottom: 24px; width: 100%; max-width: 520px;
+    }
+    .tab-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
+      height: 42px; border: none; border-radius: 100px;
+      background: transparent; color: var(--steel);
+      font-family: var(--font); font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.18s ease;
+    }
+    .tab-btn:hover { color: var(--ink); background: var(--surface); }
+    .tab-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0 2px 8px rgba(0,120,212,0.25); }
+    .tab-btn .badge {
+      display: none; align-items: center; justify-content: center;
+      min-width: 20px; height: 20px; padding: 0 6px;
+      border-radius: 100px; font-size: 11px; font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .tab-btn .badge.show { display: inline-flex; }
+    .tab-btn:not(.active) .badge { background: var(--primary-soft); color: var(--primary); }
+    .tab-btn.active .badge { background: rgba(255,255,255,0.25); color: #fff; }
+
+    /* ── Panels ── */
+    .panel { display: none; width: 100%; max-width: 520px; }
+    .panel.active { display: block; }
+
+    /* ── Card ── */
     .card {
-      background: var(--canvas);
-      border: 1px solid var(--hairline);
-      border-radius: 24px;
-      padding: 32px;
-      width: 100%;
-      max-width: 520px;
+      background: var(--canvas); border: 1px solid var(--hairline);
+      border-radius: 24px; padding: 32px; width: 100%;
       box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
 
+    /* ── Search ── */
     .search-group { position: relative; }
-
     .search-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--steel);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
+      display: block; font-size: 12px; font-weight: 700;
+      color: var(--steel); letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 8px;
     }
-
-    .search-input-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-    .search-input-wrap svg {
-      position: absolute;
-      left: 16px;
-      color: var(--stone);
-      pointer-events: none;
-    }
-
+    .search-input-wrap { position: relative; display: flex; align-items: center; }
+    .search-input-wrap > svg { position: absolute; left: 16px; color: var(--stone); pointer-events: none; }
     .search-input {
-      width: 100%;
-      height: 52px;
-      border: 2px solid var(--hairline);
-      border-radius: 100px;
-      padding: 0 48px 0 48px;
-      font-family: var(--font);
-      font-size: 18px;
-      font-weight: 600;
-      font-variant-numeric: tabular-nums;
-      color: var(--ink-deep);
-      background: var(--canvas);
-      outline: none;
+      width: 100%; height: 52px;
+      border: 2px solid var(--hairline); border-radius: 100px;
+      padding: 0 48px; font-family: var(--font); font-size: 18px;
+      font-weight: 600; font-variant-numeric: tabular-nums;
+      color: var(--ink-deep); background: var(--canvas); outline: none;
       transition: border-color 0.15s ease;
     }
-    .search-input::placeholder {
-      color: var(--stone);
-      font-weight: 400;
-      font-size: 15px;
-    }
-    .search-input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-soft);
-    }
-
+    .search-input::placeholder { color: var(--stone); font-weight: 400; font-size: 15px; }
+    .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
     .clear-btn {
-      position: absolute;
-      right: 8px;
-      width: 36px;
-      height: 36px;
-      border: none;
-      background: var(--surface);
-      border-radius: 50%;
-      cursor: pointer;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      color: var(--steel);
-      transition: background 0.12s;
+      position: absolute; right: 8px; width: 36px; height: 36px;
+      border: none; background: var(--surface); border-radius: 50%;
+      cursor: pointer; display: none; align-items: center; justify-content: center;
+      color: var(--steel); transition: background 0.12s;
     }
     .clear-btn:hover { background: var(--surface-alt); }
     .clear-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
     .clear-btn.show { display: flex; }
 
-    .result {
-      margin-top: 24px;
-      display: none;
-    }
+    /* ── Result ── */
+    .result { margin-top: 24px; display: none; }
     .result.show { display: block; }
-
-    .result-found {
-      background: var(--primary-soft);
-      border-radius: 16px;
-      padding: 20px 24px;
-    }
-
+    .result-found { background: var(--primary-soft); border-radius: 16px; padding: 20px 24px; }
     .result-item-no {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 4px;
+      font-size: 12px; font-weight: 700; color: var(--primary);
+      letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px;
     }
+    .result-desc { font-size: 20px; font-weight: 700; color: var(--ink-deep); line-height: 1.4; word-break: break-word; }
 
-    .result-desc {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--ink-deep);
-      line-height: 1.4;
-      word-break: break-word;
+    /* ── Suggestions dropdown ── */
+    .suggestions {
+      margin-top: 8px; background: var(--canvas);
+      border: 1px solid var(--hairline); border-radius: 16px;
+      overflow: hidden; max-height: 240px; overflow-y: auto;
     }
+    .suggestions:empty { display: none; }
+    .sug-row {
+      display: flex; align-items: center; padding: 10px 16px; gap: 12px;
+      cursor: pointer; transition: background 0.1s;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .sug-row:last-child { border-bottom: none; }
+    .sug-row:hover, .sug-row.active { background: var(--primary-soft); }
+    .sug-row .sug-no {
+      font-size: 13px; font-weight: 700; color: var(--primary);
+      font-variant-numeric: tabular-nums; min-width: 56px;
+    }
+    .sug-row .sug-desc { font-size: 13px; font-weight: 500; color: var(--ink); flex: 1; }
+    .sug-row mark { background: transparent; color: var(--primary); font-weight: 700; }
 
-    .copy-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      height: 48px;
-      margin-top: 16px;
-      border: none;
-      border-radius: 100px;
-      background: var(--primary);
-      color: #fff;
-      font-family: var(--font);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: -0.14px;
-      cursor: pointer;
-      transition: background 0.15s ease, transform 0.1s ease;
+    /* ── Action buttons ── */
+    .action-row { display: flex; gap: 10px; margin-top: 16px; }
+    .btn-pill {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      height: 48px; border: none; border-radius: 100px;
+      font-family: var(--font); font-size: 14px; font-weight: 700;
+      letter-spacing: -0.14px; cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease; padding: 0 24px;
     }
-    .copy-btn:hover { background: var(--primary-deep); }
-    .copy-btn:active { transform: scale(0.98); }
-    .copy-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+    .btn-pill:active { transform: scale(0.98); }
+    .btn-pill:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+    .btn-primary { flex: 1; background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-deep); }
+    .btn-primary.copied { background: var(--success); pointer-events: none; }
+    .btn-add-note { background: var(--amber); color: var(--ink-deep); white-space: nowrap; }
+    .btn-add-note:hover { filter: brightness(0.92); }
+    .btn-add-note.added { background: var(--success); color: #fff; pointer-events: none; }
 
-    .copy-btn.copied {
-      background: var(--success);
-      pointer-events: none;
-    }
-
-    .result-not-found {
-      background: var(--critical-soft);
-      border-radius: 16px;
-      padding: 20px 24px;
-      text-align: center;
-    }
+    /* ── Not found ── */
+    .result-not-found { background: var(--critical-soft); border-radius: 16px; padding: 20px 24px; text-align: center; }
     .result-not-found .nf-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--critical);
-      color: #fff;
-      margin-bottom: 8px;
-      font-size: 18px;
-      font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--critical); color: #fff; margin-bottom: 8px;
+      font-size: 18px; font-weight: 700;
     }
-    .result-not-found p {
-      font-size: 14px;
-      color: var(--charcoal);
-      font-weight: 500;
-    }
-    .result-not-found .nf-code {
-      color: var(--critical);
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-    }
+    .result-not-found p { font-size: 14px; color: var(--charcoal); font-weight: 500; }
+    .result-not-found .nf-code { color: var(--critical); font-weight: 700; font-variant-numeric: tabular-nums; }
 
-    .item-list {
-      margin-top: 28px;
-      width: 100%;
-      max-width: 520px;
-    }
+    /* ── Item list ── */
+    .item-list { margin-top: 24px; width: 100%; }
     .item-list-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--stone);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-      padding-left: 4px;
+      font-size: 12px; font-weight: 700; color: var(--stone);
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 10px; padding-left: 4px;
     }
-    .item-table {
-      background: var(--canvas);
-      border: 1px solid var(--hairline);
-      border-radius: 16px;
-      overflow: hidden;
-    }
+    .item-table { background: var(--canvas); border: 1px solid var(--hairline); border-radius: 16px; overflow: hidden; }
     .item-row {
-      display: flex;
-      align-items: center;
-      padding: 12px 20px;
-      gap: 16px;
-      cursor: pointer;
-      transition: background 0.1s;
+      display: flex; align-items: center; padding: 12px 20px; gap: 16px;
+      cursor: pointer; transition: background 0.1s;
       border-bottom: 1px solid var(--hairline);
     }
     .item-row:last-child { border-bottom: none; }
     .item-row:hover { background: var(--primary-soft); }
     .item-row:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; border-radius: 4px; }
-    .item-row .ir-no {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--primary);
-      font-variant-numeric: tabular-nums;
-      min-width: 64px;
+    .item-row .ir-no { font-size: 14px; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; min-width: 64px; }
+    .item-row .ir-desc { font-size: 14px; font-weight: 500; color: var(--ink); flex: 1; }
+    .item-row .ir-arrow { color: var(--stone); flex-shrink: 0; }
+
+    /* ── Notes Panel ── */
+    .notes-card {
+      background: var(--canvas); border: 1px solid var(--hairline);
+      border-radius: 24px; padding: 32px; width: 100%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
-    .item-row .ir-desc {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--ink);
-      flex: 1;
+    .notes-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .notes-header-left { display: flex; align-items: center; gap: 8px; }
+    .notes-header-left svg { color: var(--amber); }
+    .notes-header h2 { font-size: 16px; font-weight: 700; color: var(--ink-deep); }
+    .notes-count { font-size: 12px; font-weight: 700; color: var(--stone); background: var(--surface); padding: 4px 10px; border-radius: 100px; }
+    .notes-empty { text-align: center; padding: 32px 16px; color: var(--stone); }
+    .notes-empty-icon { font-size: 36px; margin-bottom: 8px; opacity: 0.5; }
+    .notes-empty p { font-size: 14px; font-weight: 500; line-height: 1.5; }
+    .notes-empty .hint { font-size: 12px; color: var(--stone); margin-top: 4px; }
+    .notes-list { display: flex; flex-direction: column; }
+    .note-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--hairline);
+      animation: noteIn 0.2s ease;
     }
-    .item-row .ir-arrow {
-      color: var(--stone);
-      flex-shrink: 0;
+    @keyframes noteIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+    .note-item:last-child { border-bottom: none; }
+    .note-num {
+      display: flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--primary-soft); color: var(--primary);
+      font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; flex-shrink: 0;
     }
+    .note-text { flex: 1; font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+    .note-remove {
+      width: 30px; height: 30px; border: none; background: transparent;
+      border-radius: 50%; cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      color: var(--stone); transition: all 0.12s; flex-shrink: 0;
+    }
+    .note-remove:hover { background: var(--critical-soft); color: var(--critical); }
+    .note-remove:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .notes-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .btn-copy-all { flex: 1; background: var(--primary); color: #fff; }
+    .btn-copy-all:hover { background: var(--primary-deep); }
+    .btn-copy-all.copied { background: var(--success); pointer-events: none; }
+    .btn-clear-all { background: var(--surface); color: var(--steel); padding: 0 20px; }
+    .btn-clear-all:hover { background: var(--surface-alt); color: var(--critical); }
 
     @media (max-width: 540px) {
       body { padding: 24px 12px 40px; }
-      .card { padding: 24px 20px; border-radius: 20px; }
+      .card, .notes-card { padding: 24px 20px; border-radius: 20px; }
       .header h1 { font-size: 22px; }
       .result-desc { font-size: 17px; }
+      .action-row { flex-direction: column; }
+      .notes-actions { flex-direction: column; }
     }
   </style>
 </head>
 <body>
+
   <div class="header">
     <div class="header-bar">
       <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M7 1a6 6 0 1 0 3.46 10.88l2.83 2.83a1 1 0 0 0 1.42-1.42l-2.83-2.83A6 6 0 0 0 7 1ZM3 7a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" fill="currentColor"/></svg>
@@ -347,129 +327,313 @@
     </div>
     <h1>ค้นหารายการสินค้า</h1>
     <p>ใส่รหัสสินค้าเพื่อค้นหา Description แล้ว Copy ไปใช้งาน</p>
+    <div class="data-status loading" id="dataStatus">
+      <span class="data-dot pulse"></span>
+      กำลังโหลดข้อมูล...
+    </div>
   </div>
 
-  <div class="card">
-    <div class="search-group">
-      <label class="search-label" for="itemInput">Item No</label>
-      <div class="search-input-wrap">
-        <svg width="18" height="18" fill="none" viewBox="0 0 16 16"><path d="M7 1a6 6 0 1 0 3.46 10.88l2.83 2.83a1 1 0 0 0 1.42-1.42l-2.83-2.83A6 6 0 0 0 7 1ZM3 7a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" fill="currentColor"/></svg>
-        <input class="search-input" id="itemInput" type="text" inputmode="numeric" placeholder="เช่น 152509" autocomplete="off">
-        <button class="clear-btn" id="clearBtn" aria-label="ล้างค่า">
-          <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4.47 4.47a.75.75 0 0 1 1.06 0L8 6.94l2.47-2.47a.75.75 0 1 1 1.06 1.06L9.06 8l2.47 2.47a.75.75 0 1 1-1.06 1.06L8 9.06l-2.47 2.47a.75.75 0 0 1-1.06-1.06L6.94 8 4.47 5.53a.75.75 0 0 1 0-1.06Z" fill="currentColor"/></svg>
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="search" id="tabSearch">
+      <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M7 1a6 6 0 1 0 3.46 10.88l2.83 2.83a1 1 0 0 0 1.42-1.42l-2.83-2.83A6 6 0 0 0 7 1ZM3 7a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" fill="currentColor"/></svg>
+      Search
+    </button>
+    <button class="tab-btn" data-tab="notes" id="tabNotes">
+      <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v11a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5v-11ZM5.5 5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5Zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5Zm0 2.5a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3Z" fill="currentColor"/></svg>
+      Notes
+      <span class="badge" id="notesBadge">0</span>
+    </button>
+  </div>
+
+  <!-- Search Panel -->
+  <div class="panel active" id="panelSearch">
+    <div class="card">
+      <div class="search-group">
+        <label class="search-label" for="itemInput">Item No</label>
+        <div class="search-input-wrap">
+          <svg width="18" height="18" fill="none" viewBox="0 0 16 16"><path d="M7 1a6 6 0 1 0 3.46 10.88l2.83 2.83a1 1 0 0 0 1.42-1.42l-2.83-2.83A6 6 0 0 0 7 1ZM3 7a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" fill="currentColor"/></svg>
+          <input class="search-input" id="itemInput" type="text" inputmode="numeric" placeholder="เช่น 145128" autocomplete="off">
+          <button class="clear-btn" id="clearBtn" aria-label="ล้างค่า">
+            <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4.47 4.47a.75.75 0 0 1 1.06 0L8 6.94l2.47-2.47a.75.75 0 1 1 1.06 1.06L9.06 8l2.47 2.47a.75.75 0 1 1-1.06 1.06L8 9.06l-2.47 2.47a.75.75 0 0 1-1.06-1.06L6.94 8 4.47 5.53a.75.75 0 0 1 0-1.06Z" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="result" id="result"></div>
+      <div id="suggestions"></div>
+    </div>
+
+    <div class="item-list">
+      <div class="item-list-title" id="itemListTitle">ตัวอย่างรายการสินค้า</div>
+      <div class="item-table" id="itemTable"></div>
+    </div>
+  </div>
+
+  <!-- Notes Panel -->
+  <div class="panel" id="panelNotes">
+    <div class="notes-card">
+      <div class="notes-header">
+        <div class="notes-header-left">
+          <svg width="20" height="20" fill="none" viewBox="0 0 16 16"><path d="M3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v11a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5v-11ZM5.5 5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5Zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5Zm0 2.5a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3Z" fill="currentColor"/></svg>
+          <h2>Notes</h2>
+        </div>
+        <span class="notes-count" id="notesCount">0 รายการ</span>
+      </div>
+      <div id="notesContent"></div>
+      <div class="notes-actions" id="notesActions" style="display:none">
+        <button class="btn-pill btn-copy-all" id="copyAllBtn">
+          <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 10.5h-1a1.5 1.5 0 0 1-1.5-1.5v-6A1.5 1.5 0 0 1 2.5 1.5h6A1.5 1.5 0 0 1 10 3v1" stroke="currentColor" stroke-width="1.5"/></svg>
+          Copy ทั้งหมด
+        </button>
+        <button class="btn-pill btn-clear-all" id="clearAllBtn">
+          <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M5.5 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5ZM3 4h10l-.8 9.2a1.5 1.5 0 0 1-1.5 1.3H5.3a1.5 1.5 0 0 1-1.5-1.3L3 4Z" stroke="currentColor" stroke-width="1.2"/></svg>
+          ล้าง
         </button>
       </div>
     </div>
-
-    <div class="result" id="result"></div>
   </div>
 
-  <div class="item-list">
-    <div class="item-list-title">รายการสินค้าทั้งหมด</div>
-    <div class="item-table" id="itemTable"></div>
-  </div>
-
+  <!-- data.js ต้องอยู่ในโฟลเดอร์เดียวกัน -->
+  <script src="data.js"></script>
   <script>
-    const ITEMS = [
-      { no: "152509", desc: "ผักชี ถุงใหญ่" },
-      { no: "152510", desc: "มันไข่ กก ละ" },
-      { no: "152517", desc: "ยอดฟักแม้ว" },
-      { no: "152570", desc: "ผักกาดหอม ถุงใหญ่" },
-      { no: "152580", desc: "พริกขี้หนูแดง กก ละ" },
-      { no: "152602", desc: "มะกรูด" },
-      { no: "152624", desc: "ใบกระเพรา กก.ละ" },
-      { no: "152639", desc: "ใบกะเพรา ถุงใหญ่" }
-    ];
+    // ── Data: ITEMS = [[no, desc], ...] loaded from data.js ──
+    // Build a Map for O(1) exact lookup + keep the array for prefix search
+    let itemMap = new Map();
+    let dataReady = false;
+
+    const SHOW_LIMIT = 5;
+    let notes = [];
+    let sugIdx = -1;
 
     const input = document.getElementById('itemInput');
     const clearBtn = document.getElementById('clearBtn');
     const resultDiv = document.getElementById('result');
+    const sugDiv = document.getElementById('suggestions');
     const itemTable = document.getElementById('itemTable');
+    const dataStatus = document.getElementById('dataStatus');
+    const notesBadge = document.getElementById('notesBadge');
+    const notesCount = document.getElementById('notesCount');
+    const notesContent = document.getElementById('notesContent');
+    const notesActions = document.getElementById('notesActions');
+    const copyAllBtn = document.getElementById('copyAllBtn');
+    const clearAllBtn = document.getElementById('clearAllBtn');
 
-    // Build item list
-    ITEMS.forEach(item => {
-      const row = document.createElement('div');
-      row.className = 'item-row';
-      row.tabIndex = 0;
-      row.innerHTML = `
-        <span class="ir-no">${item.no}</span>
-        <span class="ir-desc">${item.desc}</span>
-        <svg class="ir-arrow" width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      `;
-      row.addEventListener('click', () => {
-        input.value = item.no;
-        input.dispatchEvent(new Event('input'));
-        input.focus();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    // ── Init data ──
+    function initData() {
+      if (typeof ITEMS === 'undefined') {
+        dataStatus.className = 'data-status error';
+        dataStatus.innerHTML = '<span class="data-dot"></span> ไม่พบไฟล์ data.js';
+        return;
+      }
+      for (const item of ITEMS) {
+        itemMap.set(item[0], item[1]);
+      }
+      dataReady = true;
+      const count = ITEMS.length.toLocaleString();
+      dataStatus.className = 'data-status ready';
+      dataStatus.innerHTML = '<span class="data-dot"></span> พร้อมใช้งาน ' + count + ' รายการ';
+      setTimeout(() => { dataStatus.style.opacity = '0'; dataStatus.style.transition = 'opacity 0.5s'; }, 3000);
+      buildSampleList();
+      input.focus();
+    }
+
+    function buildSampleList() {
+      itemTable.innerHTML = '';
+      const samples = ITEMS.slice(0, SHOW_LIMIT);
+      samples.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.tabIndex = 0;
+        row.innerHTML = '<span class="ir-no">' + item[0] + '</span><span class="ir-desc">' + esc(item[1]) + '</span><svg class="ir-arrow" width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        row.addEventListener('click', () => selectItem(item[0]));
+        row.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); row.click(); } });
+        itemTable.appendChild(row);
       });
-      row.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); row.click(); }
+    }
+
+    function selectItem(no) {
+      input.value = no;
+      doSearch();
+      input.focus();
+    }
+
+    function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+    // ── Tabs ──
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        const id = 'panel' + btn.dataset.tab.charAt(0).toUpperCase() + btn.dataset.tab.slice(1);
+        document.getElementById(id).classList.add('active');
+        if (btn.dataset.tab === 'search') input.focus();
       });
-      itemTable.appendChild(row);
     });
 
+    // ── Search with prefix suggestions ──
+    let searchTimer;
     input.addEventListener('input', () => {
+      clearTimeout(searchTimer);
       const val = input.value.trim();
       clearBtn.classList.toggle('show', val.length > 0);
-
       if (!val) {
         resultDiv.classList.remove('show');
+        sugDiv.innerHTML = '';
+        sugIdx = -1;
+        return;
+      }
+      searchTimer = setTimeout(() => doSearch(), 80);
+    });
+
+    function doSearch() {
+      if (!dataReady) return;
+      const val = input.value.trim();
+      if (!val) return;
+      sugIdx = -1;
+
+      // Exact match
+      const desc = itemMap.get(val);
+      if (desc !== undefined) {
+        sugDiv.innerHTML = '';
+        showResult(val, desc);
         return;
       }
 
-      const found = ITEMS.find(i => i.no === val);
-      resultDiv.classList.add('show');
+      // Prefix match → show suggestions (max 8)
+      resultDiv.classList.remove('show');
+      const matches = [];
+      for (let i = 0; i < ITEMS.length && matches.length < 8; i++) {
+        if (ITEMS[i][0].startsWith(val)) {
+          matches.push(ITEMS[i]);
+        }
+      }
 
-      if (found) {
-        const fullDesc = found.no + " " + found.desc;
-        resultDiv.innerHTML = `
-          <div class="result-found">
-            <div class="result-item-no">Item No: ${found.no}</div>
-            <div class="result-desc" id="descText">${fullDesc}</div>
-          </div>
-          <button class="copy-btn" id="copyBtn" data-desc="${fullDesc.replace(/"/g, '&quot;')}">
-            <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 10.5h-1a1.5 1.5 0 0 1-1.5-1.5v-6A1.5 1.5 0 0 1 2.5 1.5h6A1.5 1.5 0 0 1 10 3v1" stroke="currentColor" stroke-width="1.5"/></svg>
-            Copy Description
-          </button>
-        `;
-        document.getElementById('copyBtn').addEventListener('click', handleCopy);
-      } else {
-        resultDiv.innerHTML = `
-          <div class="result-not-found">
-            <div class="nf-icon">!</div>
-            <p>ไม่พบรหัสสินค้า <span class="nf-code">${val}</span></p>
-          </div>
-        `;
+      if (matches.length === 0) {
+        sugDiv.innerHTML = '';
+        resultDiv.classList.add('show');
+        resultDiv.innerHTML = '<div class="result-not-found"><div class="nf-icon">!</div><p>ไม่พบรหัสสินค้า <span class="nf-code">' + esc(val) + '</span></p></div>';
+        return;
+      }
+
+      let html = '<div class="suggestions">';
+      matches.forEach((m, i) => {
+        const noHl = '<mark>' + esc(val) + '</mark>' + esc(m[0].slice(val.length));
+        html += '<div class="sug-row" data-no="' + m[0] + '"><span class="sug-no">' + noHl + '</span><span class="sug-desc">' + esc(m[1]) + '</span></div>';
+      });
+      html += '</div>';
+      sugDiv.innerHTML = html;
+      resultDiv.classList.remove('show');
+
+      sugDiv.querySelectorAll('.sug-row').forEach(row => {
+        row.addEventListener('click', () => selectItem(row.dataset.no));
+      });
+    }
+
+    // Keyboard navigation for suggestions
+    input.addEventListener('keydown', (e) => {
+      const rows = sugDiv.querySelectorAll('.sug-row');
+      if (!rows.length) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        sugIdx = Math.min(sugIdx + 1, rows.length - 1);
+        rows.forEach((r, i) => r.classList.toggle('active', i === sugIdx));
+        rows[sugIdx].scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        sugIdx = Math.max(sugIdx - 1, 0);
+        rows.forEach((r, i) => r.classList.toggle('active', i === sugIdx));
+        rows[sugIdx].scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'Enter' && sugIdx >= 0) {
+        e.preventDefault();
+        selectItem(rows[sugIdx].dataset.no);
       }
     });
+
+    function showResult(no, desc) {
+      const fullDesc = no + ' ' + desc;
+      resultDiv.classList.add('show');
+      resultDiv.innerHTML =
+        '<div class="result-found"><div class="result-item-no">Item No: ' + esc(no) + '</div><div class="result-desc">' + esc(fullDesc) + '</div></div>' +
+        '<div class="action-row">' +
+          '<button class="btn-pill btn-primary" id="copyBtn" data-desc="' + esc(fullDesc).replace(/"/g, '&quot;') + '"><svg width="16" height="16" fill="none" viewBox="0 0 16 16"><rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 10.5h-1a1.5 1.5 0 0 1-1.5-1.5v-6A1.5 1.5 0 0 1 2.5 1.5h6A1.5 1.5 0 0 1 10 3v1" stroke="currentColor" stroke-width="1.5"/></svg> Copy</button>' +
+          '<button class="btn-pill btn-add-note" id="addNoteBtn" data-desc="' + esc(fullDesc).replace(/"/g, '&quot;') + '"><svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> + Notes</button>' +
+        '</div>';
+      document.getElementById('copyBtn').addEventListener('click', handleCopySingle);
+      document.getElementById('addNoteBtn').addEventListener('click', handleAddNote);
+    }
 
     clearBtn.addEventListener('click', () => {
       input.value = '';
       clearBtn.classList.remove('show');
       resultDiv.classList.remove('show');
+      sugDiv.innerHTML = '';
+      sugIdx = -1;
       input.focus();
     });
 
-    function handleCopy(e) {
+    // ── Copy single ──
+    function handleCopySingle(e) {
       const btn = e.currentTarget;
-      const desc = btn.dataset.desc;
-      navigator.clipboard.writeText(desc).then(() => {
+      navigator.clipboard.writeText(btn.dataset.desc).then(() => {
         btn.classList.add('copied');
-        btn.innerHTML = `
-          <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Copied!
-        `;
-        setTimeout(() => {
-          btn.classList.remove('copied');
-          btn.innerHTML = `
-            <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 10.5h-1a1.5 1.5 0 0 1-1.5-1.5v-6A1.5 1.5 0 0 1 2.5 1.5h6A1.5 1.5 0 0 1 10 3v1" stroke="currentColor" stroke-width="1.5"/></svg>
-            Copy Description
-          `;
-        }, 1800);
+        btn.innerHTML = '<svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Copied!';
+        setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<svg width="16" height="16" fill="none" viewBox="0 0 16 16"><rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 10.5h-1a1.5 1.5 0 0 1-1.5-1.5v-6A1.5 1.5 0 0 1 2.5 1.5h6A1.5 1.5 0 0 1 10 3v1" stroke="currentColor" stroke-width="1.5"/></svg> Copy'; }, 1800);
       });
     }
 
-    input.focus();
+    // ── Add to Notes ──
+    function handleAddNote(e) {
+      const btn = e.currentTarget;
+      const desc = btn.dataset.desc;
+      if (notes.includes(desc)) return;
+      notes.push(desc);
+      updateNotesBadge();
+      renderNotes();
+      btn.classList.add('added');
+      btn.innerHTML = '<svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Added!';
+      setTimeout(() => { btn.classList.remove('added'); btn.innerHTML = '<svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> + Notes'; }, 1200);
+    }
+
+    // ── Notes ──
+    function updateNotesBadge() {
+      const n = notes.length;
+      notesBadge.textContent = n;
+      notesBadge.classList.toggle('show', n > 0);
+      notesCount.textContent = n + ' รายการ';
+    }
+
+    function renderNotes() {
+      if (notes.length === 0) {
+        notesContent.innerHTML = '<div class="notes-empty"><div class="notes-empty-icon">📋</div><p>ยังไม่มีรายการ</p><p class="hint">ค้นหาสินค้าแล้วกด "+ Notes" เพื่อเพิ่มรายการ</p></div>';
+        notesActions.style.display = 'none';
+        return;
+      }
+      let html = '<div class="notes-list">';
+      notes.forEach((desc, i) => {
+        html += '<div class="note-item"><span class="note-num">' + (i+1) + '</span><span class="note-text">' + esc(desc) + '</span><button class="note-remove" data-idx="' + i + '" aria-label="ลบรายการ"><svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M4.47 4.47a.75.75 0 0 1 1.06 0L8 6.94l2.47-2.47a.75.75 0 1 1 1.06 1.06L9.06 8l2.47 2.47a.75.75 0 1 1-1.06 1.06L8 9.06l-2.47 2.47a.75.75 0 0 1-1.06-1.06L6.94 8 4.47 5.53a.75.75 0 0 1 0-1.06Z" fill="currentColor"/></svg></button></div>';
+      });
+      html += '</div>';
+      notesContent.innerHTML = html;
+      notesActions.style.display = 'flex';
+      notesContent.querySelectorAll('.note-remove').forEach(btn => {
+        btn.addEventListener('click', () => { notes.splice(parseInt(btn.dataset.idx), 1); updateNotesBadge(); renderNotes(); });
+      });
+    }
+
+    copyAllBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(notes.join('\n')).then(() => {
+        copyAllBtn.classList.add('copied');
+        copyAllBtn.innerHTML = '<svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Copied!';
+        setTimeout(() => { copyAllBtn.classList.remove('copied'); copyAllBtn.innerHTML = '<svg width="16" height="16" fill="none" viewBox="0 0 16 16"><rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 10.5h-1a1.5 1.5 0 0 1-1.5-1.5v-6A1.5 1.5 0 0 1 2.5 1.5h6A1.5 1.5 0 0 1 10 3v1" stroke="currentColor" stroke-width="1.5"/></svg> Copy ทั้งหมด'; }, 1800);
+      });
+    });
+
+    clearAllBtn.addEventListener('click', () => { notes = []; updateNotesBadge(); renderNotes(); });
+
+    // ── Init ──
+    renderNotes();
+    initData();
   </script>
 </body>
 </html>
