@@ -308,9 +308,97 @@
     .btn-clear-all { background: var(--surface); color: var(--steel); padding: 0 20px; }
     .btn-clear-all:hover { background: var(--surface-alt); color: var(--critical); }
 
+    /* ── Login Screen ── */
+    .login-screen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 24px 16px;
+    }
+    .login-card {
+      background: var(--canvas); border: 1px solid var(--hairline);
+      border-radius: 24px; padding: 48px 40px; width: 100%; max-width: 420px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;
+    }
+    .login-logo {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      background: var(--primary); color: #fff;
+      padding: 12px 32px; border-radius: 100px;
+      font-size: 14px; font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .login-card h2 { font-size: 22px; font-weight: 700; color: var(--ink-deep); margin-bottom: 6px; }
+    .login-card .login-sub { font-size: 14px; color: var(--steel); margin-bottom: 28px; font-weight: 400; }
+    .login-field { text-align: left; margin-bottom: 18px; }
+    .login-field label {
+      display: block; font-size: 13px; font-weight: 700; color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .login-field input {
+      width: 100%; height: 48px; border: 2px solid var(--hairline);
+      border-radius: 12px; padding: 0 16px; font-family: var(--font);
+      font-size: 15px; color: var(--ink-deep); background: var(--surface);
+      outline: none; transition: border-color 0.15s;
+    }
+    .login-field input::placeholder { color: var(--stone); font-weight: 400; }
+    .login-field input:focus { border-color: var(--primary); background: var(--canvas); box-shadow: 0 0 0 3px var(--primary-soft); }
+    .login-btn {
+      width: 100%; height: 50px; border: none; border-radius: 100px;
+      background: var(--primary); color: #fff; font-family: var(--font);
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      margin-top: 8px; transition: background 0.15s, transform 0.1s;
+    }
+    .login-btn:hover { background: var(--primary-deep); }
+    .login-btn:active { transform: scale(0.98); }
+    .login-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+    .login-error {
+      display: none; margin-top: 14px; padding: 10px 16px;
+      background: var(--critical-soft); border-radius: 12px;
+      font-size: 13px; font-weight: 600; color: var(--critical);
+    }
+    .login-error.show { display: block; }
+    .login-shake { animation: shake 0.4s ease; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%,60% { transform: translateX(-8px); }
+      40%,80% { transform: translateX(8px); }
+    }
+
+    /* ── User Bar ── */
+    .user-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; max-width: 520px; margin-bottom: 16px;
+      padding: 8px 4px;
+    }
+    .user-info {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .user-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700;
+    }
+    .user-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+    .user-id { font-size: 11px; font-weight: 500; color: var(--stone); }
+    .logout-btn {
+      display: flex; align-items: center; gap: 6px;
+      height: 34px; border: 1px solid var(--hairline); border-radius: 100px;
+      background: var(--canvas); color: var(--steel);
+      font-family: var(--font); font-size: 12px; font-weight: 600;
+      cursor: pointer; padding: 0 14px; transition: all 0.12s;
+    }
+    .logout-btn:hover { border-color: var(--critical); color: var(--critical); background: var(--critical-soft); }
+
+    /* ── App wrapper ── */
+    .app-wrap { display: none; width: 100%; display: flex; flex-direction: column; align-items: center; }
+    body.logged-in .login-screen { display: none; }
+    body:not(.logged-in) .app-wrap { display: none !important; }
+    body.logged-in .app-wrap { display: flex !important; }
+
     @media (max-width: 540px) {
       body { padding: 24px 12px 40px; }
       .card, .notes-card { padding: 24px 20px; border-radius: 20px; }
+      .login-card { padding: 36px 24px; border-radius: 20px; }
       .header h1 { font-size: 22px; }
       .result-desc { font-size: 17px; }
       .action-row { flex-direction: row; }
@@ -324,6 +412,46 @@
   </style>
 </head>
 <body>
+
+  <!-- Login Screen -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="login-logo">
+        <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M7 1a6 6 0 1 0 3.46 10.88l2.83 2.83a1 1 0 0 0 1.42-1.42l-2.83-2.83A6 6 0 0 0 7 1ZM3 7a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" fill="currentColor"/></svg>
+        Item Search
+      </div>
+      <h2>เข้าสู่ระบบ</h2>
+      <p class="login-sub">กรุณาเข้าสู่ระบบเพื่อใช้งาน</p>
+      <div class="login-field">
+        <label for="loginUser">Username</label>
+        <input type="text" id="loginUser" placeholder="ใส่ Username" autocomplete="username" spellcheck="false">
+      </div>
+      <div class="login-field">
+        <label for="loginPass">Password</label>
+        <input type="password" id="loginPass" placeholder="ใส่ Password" autocomplete="current-password">
+      </div>
+      <button class="login-btn" id="loginBtn">เข้าสู่ระบบ</button>
+      <div class="login-error" id="loginError">Username หรือ Password ไม่ถูกต้อง</div>
+    </div>
+  </div>
+
+  <!-- App Content (visible after login) -->
+  <div class="app-wrap" id="appWrap">
+
+  <!-- User Bar -->
+  <div class="user-bar" id="userBar">
+    <div class="user-info">
+      <div class="user-avatar" id="userAvatar"></div>
+      <div>
+        <div class="user-name" id="userName"></div>
+        <div class="user-id" id="userId"></div>
+      </div>
+    </div>
+    <button class="logout-btn" id="logoutBtn">
+      <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M6 2H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2M10.5 12.5L14 8l-3.5-4.5M14 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      ออกจากระบบ
+    </button>
+  </div>
 
   <div class="header">
     <div class="header-bar">
@@ -397,6 +525,8 @@
       </div>
     </div>
   </div>
+
+  </div><!-- /app-wrap -->
 
   <script>const _RAW=`145128	ถั่วลิงสงต้ม
 148762	ทับทิมไทย กก.ละ
@@ -152772,6 +152902,11 @@
 863589	แบร์ริ่งแชมพู สีชมพู 1500มล.X1
 863591	แชมพูแบร์ริ่ง สีชมพู 3000มล.X1`;</script>
   <script>
+    // ── Users Database ──
+    const USERS = {"RSOA1":{"p":"makroho","n":"ตุ้ม"},"SOA1":{"p":"makroho","n":"เอ"},"SOA2":{"p":"makroho","n":"หนุ่ย"},"SOA3":{"p":"makroho","n":"เมย์"},"SOA4":{"p":"makroho","n":"พิมพ์"},"SOA5":{"p":"makroho","n":"ดา"},"INV1":{"p":"makroho","n":"ทอม"},"INV2":{"p":"makroho","n":"ท๊อป"},"INV3":{"p":"makroho","n":"ปิ๊ก"},"INV4":{"p":"makroho","n":"มอส"},"RSOA2":{"p":"makroho","n":"ป๊อก"},"SOA6":{"p":"makroho","n":"แอน"},"SOA7":{"p":"makroho","n":"ก๊อต"},"SOA8":{"p":"makroho","n":"ออย"},"SOA9":{"p":"makroho","n":"อ๊อก"},"SOA10":{"p":"makroho","n":"แพรวา"},"INV5":{"p":"makroho","n":"ปอ"},"INV6":{"p":"makroho","n":"มิน"},"INV7":{"p":"makroho","n":"โอ๊ต"},"INV8":{"p":"makroho","n":"เมย์"},"INV9":{"p":"makroho","n":"แนน"},"RSOA3":{"p":"makroho","n":"หนึ่ง"},"SOA11":{"p":"makroho","n":"ท๊อป"},"SOA12":{"p":"makroho","n":"อ้อ"},"SOA13":{"p":"makroho","n":"เสถียร"},"SOA14":{"p":"makroho","n":"อาร์ต"},"INV10":{"p":"makroho","n":"เนท"},"INV11":{"p":"makroho","n":"อั๋น"},"INV12":{"p":"makroho","n":"เน"},"INV13":{"p":"makroho","n":"เจ"},"RSOA4":{"p":"makroho","n":"ตุ้ม"},"SOA15":{"p":"makroho","n":"ติ๊ก"},"SOA16":{"p":"makroho","n":"บุ๋ม"},"SOA17":{"p":"makroho","n":"ปอนด์"},"INV14":{"p":"makroho","n":"ผึ้ง"},"INV15":{"p":"makroho","n":"ไก่"},"ADMIN":{"p":"adminho","n":"ผู้ดูแลระบบ"}};
+
+    let currentUser = null;
+
     // ── Parse TSV data into Map + Array for fast lookup ──
     let itemMap = new Map();
     let ITEMS = [];
@@ -152794,6 +152929,88 @@
     const copyAllBtn = document.getElementById('copyAllBtn');
     const clearAllBtn = document.getElementById('clearAllBtn');
 
+    // ── Login / Logout ──
+    const loginScreen = document.getElementById('loginScreen');
+    const loginUser = document.getElementById('loginUser');
+    const loginPass = document.getElementById('loginPass');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const userId = document.getElementById('userId');
+
+    function doLogin() {
+      const u = loginUser.value.trim().toUpperCase();
+      const p = loginPass.value;
+      const user = USERS[u];
+      if (user && user.p === p) {
+        currentUser = u;
+        sessionStorage.setItem('itemsearch_user', u);
+        loginError.classList.remove('show');
+        applyLogin(u, user.n);
+      } else {
+        loginError.classList.add('show');
+        const card = document.querySelector('.login-card');
+        card.classList.remove('login-shake');
+        void card.offsetWidth;
+        card.classList.add('login-shake');
+      }
+    }
+
+    function applyLogin(uid, nickname) {
+      document.body.classList.add('logged-in');
+      userAvatar.textContent = nickname.charAt(0);
+      userName.textContent = nickname;
+      userId.textContent = uid;
+      loadUserNotes();
+      updateNotesBadge();
+      renderNotes();
+      if (dataReady) input.focus();
+    }
+
+    function doLogout() {
+      currentUser = null;
+      sessionStorage.removeItem('itemsearch_user');
+      document.body.classList.remove('logged-in');
+      notes = [];
+      updateNotesBadge();
+      renderNotes();
+      loginUser.value = '';
+      loginPass.value = '';
+      loginError.classList.remove('show');
+      loginUser.focus();
+    }
+
+    function saveUserNotes() {
+      if (!currentUser) return;
+      try { localStorage.setItem('notes_' + currentUser, JSON.stringify(notes)); } catch(e) {}
+    }
+
+    function loadUserNotes() {
+      if (!currentUser) { notes = []; return; }
+      try {
+        const saved = localStorage.getItem('notes_' + currentUser);
+        notes = saved ? JSON.parse(saved) : [];
+      } catch(e) { notes = []; }
+    }
+
+    loginBtn.addEventListener('click', doLogin);
+    loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    loginUser.addEventListener('keydown', e => { if (e.key === 'Enter') loginPass.focus(); });
+    logoutBtn.addEventListener('click', doLogout);
+
+    // Check session persistence
+    (function checkSession() {
+      const savedUser = sessionStorage.getItem('itemsearch_user');
+      if (savedUser && USERS[savedUser]) {
+        currentUser = savedUser;
+        applyLogin(savedUser, USERS[savedUser].n);
+      } else {
+        loginUser.focus();
+      }
+    })();
+
     // ── Init data - parse in chunks to avoid blocking mobile UI ──
     function initData() {
       const lines = _RAW.split('\n');
@@ -152812,20 +153029,17 @@
           ITEMS.push([no, desc]);
         }
         if (idx < total) {
-          // Update progress
           const pct = Math.round(idx / total * 100);
           dataStatus.innerHTML = '<span class="data-dot pulse"></span> โหลดข้อมูล ' + pct + '%';
           setTimeout(processChunk, 0);
         } else {
-          // Done
           dataReady = true;
           const count = ITEMS.length.toLocaleString();
           dataStatus.className = 'data-status ready';
           dataStatus.innerHTML = '<span class="data-dot"></span> พร้อมใช้งาน ' + count + ' รายการ';
           setTimeout(() => { dataStatus.style.opacity = '0'; dataStatus.style.transition = 'opacity 0.5s'; }, 3000);
           buildSampleList();
-          input.focus();
-          // Retry search if user already typed something
+          if (currentUser) input.focus();
           if (input.value.trim()) doSearch();
         }
       }
@@ -152866,7 +153080,7 @@
       });
     });
 
-    // ── Search with prefix suggestions ──
+    // ── Search ──
     let searchTimer;
     input.addEventListener('input', () => {
       clearTimeout(searchTimer);
@@ -152886,43 +153100,16 @@
       const val = input.value.trim();
       if (!val) return;
       sugIdx = -1;
+      sugDiv.innerHTML = '';
 
-      // Exact match
+      // Exact match only
       const desc = itemMap.get(val);
       if (desc !== undefined) {
-        sugDiv.innerHTML = '';
         showResult(val, desc);
-        return;
-      }
-
-      // Prefix match → show suggestions (max 8)
-      resultDiv.classList.remove('show');
-      const matches = [];
-      for (let i = 0; i < ITEMS.length && matches.length < 8; i++) {
-        if (ITEMS[i][0].startsWith(val)) {
-          matches.push(ITEMS[i]);
-        }
-      }
-
-      if (matches.length === 0) {
-        sugDiv.innerHTML = '';
+      } else {
         resultDiv.classList.add('show');
         resultDiv.innerHTML = '<div class="result-not-found"><div class="nf-icon">!</div><p>ไม่พบรหัสสินค้า <span class="nf-code">' + esc(val) + '</span></p></div>';
-        return;
       }
-
-      let html = '<div class="suggestions">';
-      matches.forEach((m, i) => {
-        const noHl = '<mark>' + esc(val) + '</mark>' + esc(m[0].slice(val.length));
-        html += '<div class="sug-row" data-no="' + m[0] + '"><span class="sug-no">' + noHl + '</span><span class="sug-desc">' + esc(m[1]) + '</span></div>';
-      });
-      html += '</div>';
-      sugDiv.innerHTML = html;
-      resultDiv.classList.remove('show');
-
-      sugDiv.querySelectorAll('.sug-row').forEach(row => {
-        row.addEventListener('click', () => selectItem(row.dataset.no));
-      });
     }
 
     // Keyboard navigation for suggestions
@@ -152977,12 +153164,13 @@
       });
     }
 
-    // ── Add to Notes ──
+    // ── Add to Notes (per-user) ──
     function handleAddNote(e) {
       const btn = e.currentTarget;
       const desc = btn.dataset.desc;
       if (notes.includes(desc)) return;
       notes.push(desc);
+      saveUserNotes();
       updateNotesBadge();
       renderNotes();
       btn.classList.add('added');
@@ -153012,7 +153200,12 @@
       notesContent.innerHTML = html;
       notesActions.style.display = 'flex';
       notesContent.querySelectorAll('.note-remove').forEach(btn => {
-        btn.addEventListener('click', () => { notes.splice(parseInt(btn.dataset.idx), 1); updateNotesBadge(); renderNotes(); });
+        btn.addEventListener('click', () => {
+          notes.splice(parseInt(btn.dataset.idx), 1);
+          saveUserNotes();
+          updateNotesBadge();
+          renderNotes();
+        });
       });
     }
 
@@ -153024,7 +153217,7 @@
       });
     });
 
-    clearAllBtn.addEventListener('click', () => { notes = []; updateNotesBadge(); renderNotes(); });
+    clearAllBtn.addEventListener('click', () => { notes = []; saveUserNotes(); updateNotesBadge(); renderNotes(); });
 
     // ── Init ──
     renderNotes();
