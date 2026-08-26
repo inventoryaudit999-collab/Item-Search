@@ -83,8 +83,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 16px 60px;
+      padding: 0;
       -webkit-font-smoothing: antialiased;
+    }
+    body.logged-in {
+      padding: 40px 16px 60px;
     }
 
     /* ── Header ── */
@@ -311,12 +314,13 @@
     /* ── Login Screen — full-page split layout ── */
     .login-screen {
       min-height: 100vh; min-height: 100dvh;
+      width: 100vw;
       display: flex; flex-direction: column;
       background: #ffffff;
       position: relative; overflow: hidden;
     }
     .login-hero {
-      flex: 0 0 auto; padding: 56px 32px 48px; text-align: center;
+      flex: 0 0 auto; padding: 60px 32px 52px; text-align: center;
       background: linear-gradient(160deg, #0078D4 0%, #005FA3 50%, #003d6b 100%);
       color: #fff; position: relative; overflow: hidden;
     }
@@ -348,6 +352,11 @@
     }
     .login-hero p {
       font-size: 14px; opacity: 0.8; font-weight: 400; position: relative;
+    }
+    .login-wrap {
+      display: flex; flex-direction: column;
+      min-height: 100vh; min-height: 100dvh;
+      width: 100%;
     }
     .login-form-area {
       flex: 1; display: flex; flex-direction: column;
@@ -430,16 +439,25 @@
       .login-screen {
         align-items: center; justify-content: center;
         background: linear-gradient(160deg, #0078D4 0%, #005FA3 50%, #003d6b 100%);
-        padding: 24px;
+        padding: 32px;
       }
       .login-screen > .login-wrap {
-        background: #fff; border-radius: 24px; overflow: hidden;
-        box-shadow: 0 12px 48px rgba(0,0,0,0.2);
-        max-width: 420px; width: 100%;
+        background: #fff; border-radius: 28px; overflow: hidden;
+        box-shadow: 0 16px 64px rgba(0,0,0,0.25), 0 4px 16px rgba(0,0,0,0.08);
+        max-width: 480px; width: 100%;
+        min-height: auto;
       }
-      .login-hero { padding: 40px 32px 36px; }
-      .login-hero::after { height: 24px; }
-      .login-form-area { padding: 20px 32px 32px; }
+      .login-hero { padding: 48px 40px 44px; }
+      .login-hero-icon { width: 72px; height: 72px; border-radius: 22px; }
+      .login-hero-icon svg { width: 34px; height: 34px; }
+      .login-hero h1 { font-size: 28px; }
+      .login-hero p { font-size: 15px; }
+      .login-hero::after { height: 28px; }
+      .login-form-area { padding: 24px 40px 40px; }
+      .login-form-title { font-size: 20px; margin-bottom: 28px; }
+      .login-field input { height: 54px; font-size: 16px; }
+      .login-btn { height: 54px; font-size: 17px; border-radius: 16px; }
+      .login-footer { padding-top: 28px; font-size: 12px; }
     }
 
     /* ── User Bar ── */
@@ -475,11 +493,11 @@
     body.logged-in .app-wrap { display: flex !important; }
 
     @media (max-width: 540px) {
-      body { padding: 24px 12px 40px; }
+      body.logged-in { padding: 24px 12px 40px; }
       .card, .notes-card { padding: 24px 20px; border-radius: 20px; }
-      .login-hero { padding: 44px 24px 40px; }
+      .login-hero { padding: 48px 20px 44px; }
       .login-hero h1 { font-size: 22px; }
-      .login-form-area { padding: 20px 20px 28px; }
+      .login-form-area { padding: 20px 24px 24px; }
       .header h1 { font-size: 22px; }
       .result-desc { font-size: 17px; }
       .action-row { flex-direction: row; }
